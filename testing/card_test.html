@@ -8,7 +8,7 @@
 }
 .card
 {
-	width:100px;
+	width:143px;
 	height:200px;
 	background-color: #AAA;
 	margin: 5px;
@@ -21,9 +21,10 @@
 <script type="text/javascript" src="jq.js"></script>
 <script type="text/javascript">
 // Global
-cardSize = [100,200];
+cardSize = [143,200];
 cards = [];
 zoom = 2;
+maxWeight = 0;
 
 
 function Init()
@@ -39,21 +40,16 @@ function Init()
 		
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
+		// Update maxWeight
+		if (weight > maxWeight) maxWeight = weight;
 	});
 }
 function SizeCards()
 {
-	// Instance
-	var maxWeight = 0;
-	
-	// Get the largest weight of all of the cards
-	for( c in cards )
-	{
-		if( cards[c][0] > maxWeight )
-		{
-			maxWeight = cards[c][0];
-		}
-	};
+	// to prevent divide by zero error
+	if (maxWeight == 0) {
+		return;
+	}
 	
 	// Alter the size of all of the cards on the screen
 	for( c in cards )
