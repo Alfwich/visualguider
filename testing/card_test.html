@@ -6,28 +6,37 @@
 	margin: 0px;
 	padding: 0px;
 }
+body
+{
+	overflow:hidden;
+	width:1000000px;
+	background-image: url( "image/background.png" );
+}
 .card
 {
-	width:100px;
-	height:200px;
 	background-color: #AAA;
-	margin: 5px;
+	background-image: url( "image/aa.jpg" );
+	background-size: 100% 100%;
+	margin: 10px;
 	float:left;
-	
-	border-radius:6px;
-	border: 4px solid #000;
+	box-shadow: 5px 5px 5px rgba( 0, 0, 0, 0.3 );
+	border-radius: 5%;
 }
 </style>
 <script type="text/javascript" src="jq.js"></script>
 <script type="text/javascript">
-// Global
-cardSize = [100,200];
-cards = [];
-zoom = 2;
-
 
 function Init()
 {
+	// Global
+	cardSize = [223,310];
+	maxWeight = 0;
+	cards = [];
+	zoom = 1;
+	animationDuration = 500;
+	defaultBoxShadow = $(".card").first().css( 'box-shadow' );
+	selectedBoxShadow = "0px 0px 50px rgba( 255, 255, 255, 1.0 )";
+	
 	// Get all of the weights of all of the cards on the page
 	$(".card").each(function() {
 		var weight = $(this).attr("weight");
@@ -40,12 +49,53 @@ function Init()
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
 	});
-}
-function SizeCards()
-{
-	// Instance
-	var maxWeight = 0;
+		
+	// Give all cards an on click event to resize on click
+	$(".card").click(function() {
+		var weight = $(this).attr("weight");
+		if( weight == undefined )
+		{
+			$(this).hide();
+			return;
+		}
+		
+		// Return the default border to each card
+		$(".card").css( 'box-shadow', defaultBoxShadow );
+		
+		// Give the selected card a green border
+		$(this).css( 'box-shadow', selectedBoxShadow );
+		
+		// Make the size the desired card size
+		var p = ( weight / maxWeight );
+		zoom = 1 / p;
+		
+		SizeCards( this );
+	});
 	
+	// Clicking the body will remove all of the selection borders
+	$('body').click( function (e) { 
+		if ( e.target == this && zoom != 1 )
+		{
+			zoom = 1;
+			// Return the default border to each card
+			$(".card").css( 'box-shadow', defaultBoxShadow );			
+			SizeCards( this );			
+		}
+	});
+}
+function ScrollToCard( card )
+{
+		var position = $(card).position();
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+		var cardWidth = $(card).width();
+		var cardHeight = $(card).height();
+		
+		// Scroll to the card
+		$('body').animate({ scrollTop: position.top, scrollLeft: position.left-(windowWidth/2)+(cardWidth/2) }, { duration: animationDuration, queue: false } );
+}
+function SizeCards( target )
+{
 	// Get the largest weight of all of the cards
 	for( c in cards )
 	{
@@ -62,7 +112,18 @@ function SizeCards()
 		var p = ( cards[c][0] / maxWeight );
 		
 		// Set the sizes
-		$(cards[c][1]).animate( { width: (cardSize[0]*p*zoom), height: (cardSize[1]*p*zoom) } );
+		if( target == cards[c][1] )
+		{
+			$(cards[c][1]).animate( { width: (cardSize[0]*p*zoom), height: (cardSize[1]*p*zoom) },
+									{ duration: animationDuration, queue: false, complete: function( animation, progress, remainingMs ){
+										ScrollToCard( target );
+									}});		
+		}
+		else
+		{
+			$(cards[c][1]).animate( { width: (cardSize[0]*p*zoom), height: (cardSize[1]*p*zoom) },
+									{ duration: animationDuration, queue: false } );
+		}
 		
 	}
 }
@@ -74,9 +135,10 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div class="card" weight="50"></div>
-<div class="card" weight="51"></div>
-<div class="card" weight="100"></div>
-<div class="card" weight="5"></div>
+<div class="card" weight="1"></div>
+<div class="card" weight="2.1"></div>
+<div class="card" weight="2.3"></div>
+<div class="card" weight="2.5"></div>
+<div class="card" weight="8"></div>
 </body>
 </html>
