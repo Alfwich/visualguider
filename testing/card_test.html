@@ -1,0 +1,82 @@
+<html>
+<head>
+<style>
+*
+{
+	margin: 0px;
+	padding: 0px;
+}
+.card
+{
+	width:100px;
+	height:200px;
+	background-color: #AAA;
+	margin: 5px;
+	float:left;
+	
+	border-radius:6px;
+	border: 4px solid #000;
+}
+</style>
+<script type="text/javascript" src="jq.js"></script>
+<script type="text/javascript">
+// Global
+cardSize = [100,200];
+cards = [];
+zoom = 2;
+
+
+function Init()
+{
+	// Get all of the weights of all of the cards on the page
+	$(".card").each(function() {
+		var weight = $(this).attr("weight");
+		if( weight == undefined )
+		{
+			$(this).hide();
+			return;
+		}
+		
+		// Add the weight and a reference to the card
+		cards.push( [ weight, this ] );
+	});
+}
+function SizeCards()
+{
+	// Instance
+	var maxWeight = 0;
+	
+	// Get the largest weight of all of the cards
+	for( c in cards )
+	{
+		if( cards[c][0] > maxWeight )
+		{
+			maxWeight = cards[c][0];
+		}
+	};
+	
+	// Alter the size of all of the cards on the screen
+	for( c in cards )
+	{
+		// Get the precentage
+		var p = ( cards[c][0] / maxWeight );
+		
+		// Set the sizes
+		$(cards[c][1]).animate( { width: (cardSize[0]*p*zoom), height: (cardSize[1]*p*zoom) } );
+		
+	}
+}
+
+$(document).ready(function(){
+	Init();
+	SizeCards();
+});
+</script>
+</head>
+<body>
+<div class="card" weight="50"></div>
+<div class="card" weight="51"></div>
+<div class="card" weight="100"></div>
+<div class="card" weight="5"></div>
+</body>
+</html>
