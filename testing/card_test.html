@@ -48,6 +48,8 @@ function Init()
 		
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
+		// Update maxWeight
+		if (weight > maxWeight) maxWeight = weight;
 	});
 		
 	// Give all cards an on click event to resize on click
@@ -96,7 +98,12 @@ function ScrollToCard( card )
 }
 function SizeCards( target )
 {
-	// Get the largest weight of all of the cards
+
+	// to prevent divide by zero error
+	if (maxWeight == 0) {
+		return;
+	}
+	
 	for( c in cards )
 	{
 		if( cards[c][0] > maxWeight )

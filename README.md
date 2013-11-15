@@ -1,4 +1,4 @@
-visualtrader
+Visualguider
 ============
 
-visualtrader.com
+Visualguider.com
