@@ -6,14 +6,18 @@
 {
 	margin: 0px;
 	padding: 0px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
 }
 body
 {
-	width: 1000000px;
-	height: 1000000px;
 	overflow:hidden;
 	white-space: nowrap;
-	background-image: url( "image/background.png" );
+	background-image: url( "image/bg.jpg" );
 	position:relative;
 	top:0px;
 	left:0px;
@@ -22,68 +26,95 @@ body
 {
 	position:absolute;
 	background-color: #AAA;
-	background-image: url( "image/aa.jpg" );
 	background-size: 100% 100%;
-	margin: 10px;
-	float:left;
 	box-shadow: 5px 5px 5px rgba( 0, 0, 0, 0.3 );
 	border-radius: 5%;
 }
+#center_top
+{
+	overflow:hidden;
+	white-space: nowrap;
+	width:188px;
+	background-color: rgba( 0, 0, 0, 0.2 );
+	padding: 3px;
+	border-radius: 5px;
+}
+.search_input
+{
+	height: 25px;
+	float: left;
+}
+.search_button
+{
+	width: 25px;
+	height: 25px;
+	margin-left:2px;
+	border-radius: 3px;
+	background-image: url( "image/magnifyingglass.png" );
+	background-size: 100% 100%;	
+	float: left;	
+}
 </style>
 <script type="text/javascript" src="jq.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
 function Init()
 {
 	// Global
+	screenXOffset = $(window).width()/2;
+	screenYOffset = $(window).height()/2;
 	cardSize = [223,310];
 	maxWeight = 0;
 	cards = [];
 	zoom = 1;
 	lastCardTarget = null;
-	options = { duration: 1000, queue: false, easing: "swing" };
+	options = { duration: 500, queue: false, easing: "swing" };
 	
 	// Animation variables
 	desiredZoom = 1;
-	zoomDelta = 0;
-	
-	animationDuration = 0;
-	
+		
 	// Get all of the weights of all of the cards on the page
 	$(".card").each(function() {
 		var weight = $(this).attr("weight");
+		var left = $(this).attr("left");
+		var top = $(this).attr("top");
 		if( weight == undefined )
 		{
 			$(this).hide();
 			return;
 		}
 		
+		$(this).css("background-image", "url('image/Image ("+(Math.floor(Math.random()*64)+1)+").jpg')" );
+		
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
-		
+				
 		// Update maxWeight
-		if (weight > maxWeight) maxWeight = weight;
+		if (weight > maxWeight)
+		{
+			maxWeight = weight;
+		}
 	});
-		
-	/* Size all of the cards
-	for( c in cards )
-	{
 	
-		// Get the precentage
-		var p = ( cards[c][0] / maxWeight );	
-		
-		$(cards[c][1]).animate( { width: (cardSize[0]*p*zoom), height: (cardSize[1]*p*zoom) },
-								 options );	
-	}
-	*/
+	// Move all elements into position for inital rendering
+	var oldAnimationDuration = options.duration;
+	options.duration = 0;
 	SizeCards();
-		
+	options.duration = oldAnimationDuration;
+	
 	// Give all cards an on click event to resize on click
 	$(".card").click(function() {
 		// Stop the current animation
 		$("body").stop();
-		zoomDelta = 0;
-		
+				
 		var weight = $(this).attr("weight");
 		if( weight == undefined )
 		{
@@ -98,29 +129,32 @@ function Init()
 		lastCardTarget = this;
 		SizeCards( this, 1 );
 	});
-	
-	$('body').click( function (e) { 
-		if ( e.target == this )
+	$(document).click( function (e) {
+		if( !$(e.target).hasClass("card") &&
+			!$(e.target).hasClass("search_input") &&
+			!$(e.target).hasClass("search_button")			)
 		{
 			zoom = 1;
+			lastCardTarget = null;
 			SizeCards();
 		}
-	});	
+	});
+	
 	//	Prevent mouse wheel scrolling
 	$(document).bind("mousewheel", function(e){
 	
 		// Zoom scales 
 		if( e.originalEvent.deltaY > 0 )
 		{
-			zoom -= 0.2;
-			if( zoom <= 0 )
+			zoom *= .80;
+			if( zoom <= 0.2 )
 			{
 				zoom = 0.2;
 			}
 		}
 		else
 		{
-			zoom += 0.2;
+			zoom /= .80;
 		}
 		
 		SizeCards( lastCardTarget );
@@ -130,12 +164,13 @@ function Init()
 	
 	//	Prevent mouse wheel middle button scrolling
 	$(document).mousedown(function(e){
-		if( e.which = 2 )
+		if( e.which == 2 )
 		{
 			e.preventDefault();
 			e.stopPropagation();
 		}
-	});	
+		
+	});
 }
 
 // Will center the viewport at x, y
@@ -157,10 +192,15 @@ function CenterViewport( x, y, w, h )
 	
 	// Move the coords to the center of the screen
 	x += $(window).width()/2;
-	y += $(window).height()/2;	
+	y += $(window).height()/2;
 	
 	// Move the body
 	$("body").animate( { left: x, top: y }, options );
+	
+	// Top center offset
+	x -= ( $(window).width()/2 - $("#center_top").width()/2.0 );
+	y -= 5;
+	$("#center_top").animate( { left: -x, top: -y }, options );
 }
 
 function SizeCards( target, tweens )
@@ -175,14 +215,12 @@ function SizeCards( target, tweens )
 		$(cards[c][1]).animate({ "width":cardSize[0]*p*zoom,"height":cardSize[1]*p*zoom,
 								 "left":(left*zoom)+"px", "top":(top*zoom)+"px"},options)
 	}
-	
+		
 	// Move the viewport to center on a card if we have a target card
-	if( target != undefined )
+	if( target != undefined && target != null )
 	{
 		
 		// Get the current positions of the body and the card to center on
-		var currentLeft = parseInt($("body").css("left"));
-		var currentTop = parseInt($("body").css("top"));
 		var newTargetLeft = -$(target).attr("left")*zoom;
 		var newTargetTop = -$(target).attr("top")*zoom;
 		var targetWeight = $(target).attr("weight") / maxWeight;
@@ -193,7 +231,8 @@ function SizeCards( target, tweens )
 	}
 	else
 	{
-		CenterViewport( 100, 100 );
+		// Center to middle of screen
+		CenterViewport((screenXOffset)*zoom,(screenYOffset)*zoom);
 	}	
 }
 $(document).ready(function(){
@@ -202,21 +241,23 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-<div id="cards">
+<div id="center_top" style="position:absolute; z-index:2;">
+	<input type="text" class="search_input" name="search" value="search" />
+	<button name="search_button" class="search_button"></button>
+</div>
 <?php
-
+	$cards = 40;
 	$x = 0;
 	while( $x < 2*pi() )
 	{
-		$posX = ( cos($x) * 1000 ) - 1920/2;
-		$posY = ( sin($x) * 1000 ) - 1200/2;
-		$size = rand( 1, 10 ) / 10;
+		$posX = ( cos($x) * rand( 1, 4000 ) ) - 1920/2;
+		$posY = ( sin($x) * rand( 1, 4000 ) ) - 1200/2;
+		$size = rand( 1, 1000 ) / 1000;
 		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\"></div>";
-		$x += pi()/10;
+		$x += pi()/($cards/2);
 	}
 
 
 ?>
-</div>
 </body>
 </html>
