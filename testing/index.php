@@ -92,7 +92,7 @@ function Init()
 			return;
 		}
 		
-		$(this).css("background-image", "url('image/Image ("+(Math.floor(Math.random()*64)+1)+").jpg')" );
+		//$(this).css("background-image", "url('image/Image ("+(Math.floor(Math.random()*64)+1)+").jpg')" );
 		
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
@@ -129,6 +129,7 @@ function Init()
 		lastCardTarget = this;
 		SizeCards( this, 1 );
 	});
+	
 	$(document).click( function (e) {
 		if( !$(e.target).hasClass("card") &&
 			!$(e.target).hasClass("search_input") &&
@@ -242,19 +243,39 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="center_top" style="position:absolute; z-index:2;">
-	<input type="text" class="search_input" name="search" value="search" />
-	<button name="search_button" class="search_button"></button>
+	<form method="post">
+		<input type="text" class="search_input" name="search" value="<?php echo $_POST['search'] ?>" />
+		<button name="search_button" class="search_button"></button>
+	</form>
 </div>
 <?php
-	$cards = 40;
+
+	//Variables for connecting to your database.
+	//These variable values come from your hosting account.
+	$hostname = "visualguider.db.11456014.hostedresource.com";
+	$username = "visualguider";
+	$dbname = "visualguider";
+
+	//These variable values need to be changed by you before deploying
+	$password = "guidEr11!";
+	$usertable = "cards";
+
+	//Connecting to your database
+	mysql_connect($hostname, $username, $password) OR DIE ("Unable to 
+	connect to database! Please try again later.");
+	mysql_select_db($dbname);
+
+	$cards = mysql_query( "SELECT DISTINCT title from cards WHERE title like '%{$_POST['search']}%' LIMIT 10 ");
+	
 	$x = 0;
-	while( $x < 2*pi() )
+	
+	while( $row = mysql_fetch_array($cards) )
 	{
-		$posX = ( cos($x) * rand( 1, 4000 ) ) - 1920/2;
-		$posY = ( sin($x) * rand( 1, 4000 ) ) - 1200/2;
-		$size = rand( 1, 1000 ) / 1000;
-		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\"></div>";
-		$x += pi()/($cards/2);
+		$posX = ( cos($x) * rand( 1, 1000 ) ) - 1920/2;
+		$posY = ( sin($x) * rand( 1, 1000 ) ) - 1200/2;
+		$size = rand( 1, 5 );
+		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\">{$row[0]}</div>";
+		$x += pi()/10;
 	}
 
 
