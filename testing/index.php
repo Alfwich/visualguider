@@ -11,7 +11,8 @@
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
-	user-select: none;	
+	user-select: none;
+	cursor: default;
 }
 body
 {
@@ -29,6 +30,12 @@ body
 	background-size: 100% 100%;
 	box-shadow: 5px 5px 5px rgba( 0, 0, 0, 0.3 );
 	border-radius: 5%;
+}
+.card .header
+{
+	background-color: #EEE;
+	width: 100%;
+	margin-top: 5%;
 }
 #center_top
 {
@@ -274,7 +281,7 @@ $(document).ready(function(){
 		$posX = ( cos($x) * rand( 1, 1000 ) ) - 1920/2;
 		$posY = ( sin($x) * rand( 1, 1000 ) ) - 1200/2;
 		$size = rand( 1, 5 );
-		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\">{$row[0]}</div>";
+		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\"><div class=\"header\">{$row[0]}</div></div>";
 		$x += pi()/10;
 	}
 
