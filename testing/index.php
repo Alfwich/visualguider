@@ -36,6 +36,8 @@ body
 	background-color: #EEE;
 	width: 100%;
 	margin-top: 5%;
+	position: relative;
+	top: 60px;
 }
 #center_top
 {
@@ -99,7 +101,8 @@ function Init()
 			return;
 		}
 		
-		//$(this).css("background-image", "url('image/Image ("+(Math.floor(Math.random()*64)+1)+").jpg')" );
+		
+		$(this).css("background-image", "url('image/"+$(this).attr("src")+"')" );
 		
 		// Add the weight and a reference to the card
 		cards.push( [ weight, this ] );
@@ -131,7 +134,7 @@ function Init()
 				
 		// Make the size the desired card size
 		var p = ( weight / maxWeight );
-		zoom = 1 / p;
+		zoom = ( 1 / p ) * 2;
 		
 		lastCardTarget = this;
 		SizeCards( this, 1 );
@@ -271,18 +274,65 @@ $(document).ready(function(){
 	mysql_connect($hostname, $username, $password) OR DIE ("Unable to 
 	connect to database! Please try again later.");
 	mysql_select_db($dbname);
-
-	$cards = mysql_query( "SELECT DISTINCT title from cards WHERE title like '%{$_POST['search']}%' LIMIT 10 ");
+	
+	$search = mysql_real_escape_string(strip_tags( $_POST['search'] ));
+	$cards = mysql_query( "SELECT DISTINCT title, img from cards WHERE title like '%{$_POST['search']}%' LIMIT 4 ");
 	
 	$x = 0;
 	
+	function get_images( $query, $start )
+	{
+		$url = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0';
+		$url .= '&q=' . urlencode( $query );
+		$url .= '&start=' . urlencode( $start );
+		$c = curl_init();
+		curl_setopt( $c, CURLOPT_URL, $url );
+		curl_setopt( $c, CURLOPT_RETURNTRANSFER, 1 );
+		$data = curl_exec( $c );
+		return json_decode( $data );
+	}	
+		
 	while( $row = mysql_fetch_array($cards) )
 	{
-		$posX = ( cos($x) * rand( 1, 1000 ) ) - 1920/2;
-		$posY = ( sin($x) * rand( 1, 1000 ) ) - 1200/2;
-		$size = rand( 1, 5 );
-		echo "<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\"><div class=\"header\">{$row[0]}</div></div>";
-		$x += pi()/10;
+		$posX = ( cos($x) * 500 ) - 1920/2;
+		$posY = ( sin($x) * 200 ) - 1200/2;
+		$size = rand( 5, 5 );
+		
+		if( strlen($row[1]) <= 0 )
+		{
+			// For new sources if found
+			// Sources:
+			//		'tcg player' *** has no borders ***
+			$source = rand( 1, 1 );
+			switch( $source )
+			{
+				case 1:
+					$cardData = get_images( "gatherer.wizards {$row[0]}", 0);
+				break;		
+				
+			}
+			
+			copy($cardData->responseData->results[0]->unescapedUrl, "image/{$row[0]}.jpg");
+			$imgSrc = "{$row[0]}.jpg";
+			
+			if( is_readable( "image/{$row[0]}.jpg" ) )
+			{
+				mysql_query( "UPDATE cards set img='{$imgSrc}' WHERE title=\"{$row[0]}\"" );
+			}
+		}
+		else
+		{
+			$imgSrc = $row[1];
+		}
+		$titleEncode = urlencode($row[0]);
+		// Removed to not seem suspicious
+		//<a href=\"http://magic.tcgplayer.com/db/magic_single_card.asp?cn={$titleEncode}\" target=\"blank\">(TCG){$row[0]}</a>
+		echo "	<div class=\"card\" weight=\"{$size}\" top=\"{$posY}\" left=\"{$posX}\" src=\"{$imgSrc}\">
+				<div class=\"header\">
+					<a href=\"http://gatherer.wizards.com/Pages/Search/Default.aspx?name={$titleEncode}\" target=\"blank\">(Gatherer){$row[0]}</a><BR/>
+				</div>
+			</div>";
+		$x -= pi()/3;
 	}
 
 

@@ -1,5 +1,6 @@
 <?php
 return;
+
 $cards = file_get_contents( "cards.txt" );
 $cards = explode( PHP_EOL, $cards );
 $inBody = false;
