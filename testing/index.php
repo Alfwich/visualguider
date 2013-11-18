@@ -6,6 +6,7 @@
 {
 	margin: 0px;
 	padding: 0px;
+	
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -38,12 +39,23 @@ body
 	margin-top: 5%;
 	position: relative;
 	top: 60px;
+	
+}
+.card .header a
+{
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
 }
 #center_top
 {
 	overflow:hidden;
 	white-space: nowrap;
-	width:188px;
+	/* width:188px; */
 	background-color: rgba( 0, 0, 0, 0.2 );
 	padding: 3px;
 	border-radius: 5px;
@@ -152,10 +164,13 @@ function Init()
 	});
 	
 	//	Prevent mouse wheel scrolling
-	$(document).bind("mousewheel", function(e){
+	$(document).bind("mousewheel DOMMouseScroll MozMousePixelScroll", function(e){
 	
 		// Zoom scales 
-		if( e.originalEvent.deltaY > 0 )
+		var e = window.event || e.originalEvent; // old IE support
+		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+		if( delta < 0 )
 		{
 			zoom *= .80;
 			if( zoom <= 0.2 )
