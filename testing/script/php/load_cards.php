@@ -37,6 +37,7 @@
 			continue;
 
 		}
+		
 		if( strlen( $row['img'] ) <= 0 )
 		{
 			// For new sources if found
@@ -46,7 +47,7 @@
 			switch( $source )
 			{
 				case 1:
-					$cardData = get_images( "gatherer.wizards {$row['title']}", 0);
+					$cardData = get_images( "gatherer.wizards.com {$row['title']}", 0);
 				break;		
 				
 			}
@@ -54,7 +55,7 @@
 			copy($cardData->responseData->results[0]->unescapedUrl, "/home/content/14/11456014/html/misc/visualguider/image/{$row['title']}.jpg");
 			$row['img'] = "{$row['title']}.jpg";
 			
-			if( is_readable( "image/{$row['title']}.jpg" ) )
+			if( is_readable( "/home/content/14/11456014/html/misc/visualguider/image/{$row['title']}.jpg" ) )
 			{
 				mysql_query( "UPDATE cards set img='{$row['img']}' WHERE title=\"{$row['title']}\"" );
 			}

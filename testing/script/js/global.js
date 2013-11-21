@@ -378,6 +378,11 @@ function LoadCards( q )
 		"script/php/load_cards.php",
 		{ "q" : q },
 		function(data) {
+		
+			// Reset ui
+			$("#search_button").css("background-image", "url('image/magnifyingglass.png')");
+			$("#search_button").removeAttr( "disabled" );		
+		
 			cards = JSON.parse(data);
 			var x = ( Math.random() * 3000 ) - 1500;
 			var y = ( Math.random() * 3000 ) - 1500;
@@ -390,10 +395,6 @@ function LoadCards( q )
 						
 			// Add a remove button to the right panel
 			AddQuery( q, cards );
-			
-			// Reset ui
-			$("#search_button").css("background-image", "url('image/magnifyingglass.png')");
-			$("#search_button").removeAttr( "disabled" );
 		}
 	);
 }
