@@ -154,7 +154,7 @@ function AddCard( card, x, y )
 	$div.css("top", ( y*zoom )+(cardSize[1]*zoom)/2 );
 	
 	// Set the background of the card
-	$div.css("background-image", "url('image/"+card.img+"')" );
+	$div.css("background-image", "url('image/card/"+card.img+"')" );
 	
 	// When the card gets clicked focus on it
 	$div.click(function(e) {

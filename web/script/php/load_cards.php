@@ -52,10 +52,10 @@
 				
 			}
 			
-			copy($cardData->responseData->results[0]->unescapedUrl, "/home/content/14/11456014/html/misc/visualguider/image/{$row['title']}.jpg");
+			copy($cardData->responseData->results[0]->unescapedUrl, "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg");
 			$row['img'] = "{$row['title']}.jpg";
 			
-			if( is_readable( "/home/content/14/11456014/html/misc/visualguider/image/{$row['title']}.jpg" ) )
+			if( is_readable( "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg" ) )
 			{
 				mysql_query( "UPDATE cards set img='{$row['img']}' WHERE title=\"{$row['title']}\"" );
 			}
