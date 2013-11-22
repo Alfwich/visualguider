@@ -373,10 +373,20 @@ function HighlightQuery( query_id, title )
 // Will http request the php image loading script
 function LoadCards( q )
 {
-	var post = { "q" : q };
+	var m = $("input.mythic").prop('checked');
+	var r = $("input.rare").prop('checked');
+	var u = $("input.uncommon").prop('checked');
+	var c = $("input.common").prop('checked');
+	var post = { 
+			"q" : q,
+			"m" : m,			
+			"r" : r,
+			"u" : u,
+			"c" : c,			
+	};
 	$.post(
 		"script/php/load_cards.php",
-		{ "q" : q },
+		post,
 		function(data) {
 		
 			// Reset ui
@@ -430,18 +440,6 @@ function Clear()
 	$(".card, .query, .clear_button").fadeOut( 400, function(){
 		$(this).remove();
 	});		
-}
-
-// Default search value detector
-function onFocus(el) {
-    if (el.value == el.defaultValue) {
-        el.value = '';
-    }
-}
-function onBlur(el) {
-    if (el.value == '') {
-        el.value = el.defaultValue;
-    }
 }
 
 $(document).ready(function(){

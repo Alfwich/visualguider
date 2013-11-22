@@ -11,8 +11,14 @@
 <body>
 	<div id="center_top" style="position:absolute; z-index:2;">
 		<div id="center_top_wrapper">
-			<input type="text" class="search_input" id="search_input" onblur="onBlur(this)" onfocus="onFocus(this)" name="search" value="Card Search..." />
+			<input type="text" class="search_input" id="search_input" name="search" placeholder="Search Card Name" />
 			<button name="search_button" class="search_button" id="search_button" onclick="SearchCards();"></button>
+			<div id="rarity">
+				<div class="option"><input type="checkbox" class="mythic"><label class="rare">M</label></div>			
+				<div class="option"><input type="checkbox" class="rare"><label class="rare">R</label></div>
+				<div class="option"><input type="checkbox" class="uncommon"><label class="uncommon">U</label></div>
+				<div class="option"><input type="checkbox" class="common"><label class="common">C</label></div>
+			</div>
 		</div>
 	</div>
 	<div id="right" style="position:absolute; z-index:3;"></div>

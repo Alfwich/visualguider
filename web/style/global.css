@@ -56,17 +56,21 @@ body
 {
 	overflow:hidden;
 	white-space: nowrap;
-	width:200px;
-	background-color: rgba( 0, 0, 0, 0.4 );
+	width: 100%;
 	padding: 3px;
 	border-radius: 5px;
-	border: 1px solid #000;	
 }
 #center_top_wrapper
 {
 	width:190px;
-	margin: 0px auto 0px 5px;
+	margin: 0px auto 0px auto;
 }
+#rarity
+{
+	width:190px;
+}
+
+
 #right
 {
 	overflow:hidden;
@@ -128,3 +132,50 @@ body
 {
 	width: 100%;
 }
+
+.option
+{
+	float:left;
+	margin-right: 10px;
+}
+
+.common
+{
+	color:#000;
+}
+
+.uncommon
+{
+	color:#000;
+}
+
+.rare
+{
+	color:#000;
+}
+
+.mythic
+{
+	color:#000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
