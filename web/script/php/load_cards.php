@@ -116,14 +116,27 @@
 				
 			}
 			
-			copy($cardData->responseData->results[0]->unescapedUrl, "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg");
-			$row['img'] = "{$row['title']}.jpg";
+			$i = 0;
 			
-			if( is_readable( "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg" ) )
+			while( $i < count( $cardData->responseData->results ) )
 			{
-				mysql_query( "UPDATE cards set img='{$row['img']}' WHERE title=\"{$row['title']}\"" );
+				if( intval($cardData->responseData->results[$i]->width) != 223 ||
+					intval($cardData->responseData->results[$i]->height) != 310 )
+				{
+					$i++;
+					continue;
+				}
+				
+				
+				copy($cardData->responseData->results[$i]->unescapedUrl, "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg");
+				$row['img'] = "{$row['title']}.jpg";
+				
+				if( is_readable( "/home/content/14/11456014/html/misc/visualguider/image/card/{$row['title']}.jpg" ) )
+				{
+					mysql_query( "UPDATE cards set img='{$row['img']}' WHERE title=\"{$row['title']}\"" );
+				}
+				break;
 			}
-		
 		}
 		
 		$output[] = $row;		
