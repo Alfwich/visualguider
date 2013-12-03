@@ -21,6 +21,7 @@ queries = 0;
 function Init()
 {
 	// When the document is clicked default the zoom and return to center and reset ui
+    // Refactor this
 	$(document).click( function (e) {
 		if( !$(e.target).hasClass("card") 				&&
 			!$(e.target).hasClass("search_input") 		&&
@@ -75,17 +76,7 @@ function Init()
 		e.preventDefault();
 		e.stopPropagation();
 	});
-	
-	//	Prevent mouse wheel middle button scrolling
-	$(document).mousedown(function(e){
-		if( e.which == 2 )
-		{
-			e.preventDefault();
-			e.stopPropagation();
-		}
 		
-	});
-	
 	// Enter key will submit 
 	$(document).keypress(function(e)
 	{
@@ -194,13 +185,8 @@ function CenterViewport( x, y, w, h )
 	x += $(window).width()/2;
 	y += $(window).height()/2;
 	
-	// Move the application
+	// Move the viewport
 	$("#viewport").animate( { left: x, top: y }, options );
-		
-	// Move UI Elements
-	//$("#center_top").animate( { left: -x + ( $(window).width()/2 - $("#center_top").width()/2.0 ), top: -y+5 }, options );
-	//$("#right").animate( { left: -x + $(window).width() - ($("#right").width()), top: -y }, options );
-
 }
 
 function FocusViewport( target, duration )
@@ -339,7 +325,7 @@ function RemoveQuery( query_id )
 	});
 }
 
-// Removes all of the objects that are a part of the specified query
+// Highlights all cards that are part of the query
 function HighlightQuery( query_id, title )
 {
 	// Unhighlight all cards
@@ -356,7 +342,7 @@ function HighlightQuery( query_id, title )
 		jq += "[name='"+title+"']";
 	}
 	
-	// Remove each card generated with this query
+	// Highlight each card generated with this query
 	$(".card"+jq).each( function(e){
 		$(this).css( "z-index", "1" );
 		$(this).css( "border", "3px solid #0F0" );
