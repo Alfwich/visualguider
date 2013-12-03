@@ -161,14 +161,14 @@ function AddCard( card, x, y )
 		
 		var card = e.target;
 		// Stop the current animation
-		$("body").stop();
+		$("#viewport").stop();
 						
 		SizeCards( card );
 		FocusViewport( card );
 		
 	});
 	
-	$("body").append($div);
+	$("#viewport").append($div);
 	
 	SizeCards();
 }
@@ -194,12 +194,12 @@ function CenterViewport( x, y, w, h )
 	x += $(window).width()/2;
 	y += $(window).height()/2;
 	
-	// Move the body
-	$("body").animate( { left: x, top: y }, options );
+	// Move the application
+	$("#viewport").animate( { left: x, top: y }, options );
 		
 	// Move UI Elements
-	$("#center_top").animate( { left: -x + ( $(window).width()/2 - $("#center_top").width()/2.0 ), top: -y+5 }, options );
-	$("#right").animate( { left: -x + $(window).width() - ($("#right").width()), top: -y }, options );
+	//$("#center_top").animate( { left: -x + ( $(window).width()/2 - $("#center_top").width()/2.0 ), top: -y+5 }, options );
+	//$("#right").animate( { left: -x + $(window).width() - ($("#right").width()), top: -y }, options );
 
 }
 
@@ -216,7 +216,7 @@ function FocusViewport( target, duration )
 	if( target != undefined && target != null )
 	{
 		
-		// Get the current positions of the body and the card to center on
+		// Get the current positions of the application and the card to center on
 		var newTargetLeft = -$(target).attr("left")*zoom;
 		var newTargetTop = -$(target).attr("top")*zoom;
 		var targetWeight = $(target).attr("weight") / maxWeight;
