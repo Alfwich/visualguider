@@ -23,6 +23,8 @@
 	-ms-user-select: none;
 	user-select: none;
     z-index:-5;
+  background-repeat: no-repeat;
+  background-color: #022634;
 }
 
 #viewport
