@@ -118,7 +118,6 @@
 			switch( $source )
 			{
 				case 1:
-          //echo "gatherer.wizards.com {$row['title']}", "<BR/>";
 					$cardData = get_images( "gatherer.wizards.com {$row['title']}", 0);
 				break;		
 				
@@ -130,21 +129,16 @@
 			{
 			  $width = intval($cardData->responseData->results[$i]->width);
 			  $height = intval($cardData->responseData->results[$i]->height);
-			  //echo $width, ":", $height, ":", $row["name"], "<BR/>";
 			  if( abs($width-223) > 10 || abs($height-310) > 10 ) {
 					$i++;
 					continue;
 				}
 				
 				$row['img'] = clean($row['title']);
-				
-        //echo "saved to:", "/home/webserver/www/visualguider/image/card/{$row['img']}.jpg", '<BR/>';
 				copy($cardData->responseData->results[$i]->unescapedUrl, "/home/webserver/www/visualguider/image/card/{$row['img']}.jpg");
 				
-        //echo "/home/webserver/www/visualguider/image/card/{$row['img']}.jpg", '<BR/>';
 				if( is_readable( "/home/webserver/www/visualguider/image/card/{$row['img']}.jpg" ) )
 				{
-          //echo "Wrote!??!", '<BR/>';
 					mysql_query( "UPDATE cards set img='{$row['img']}' WHERE title=\"{$row['title']}\"" );
 				}
 				break;
