@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visual Guider</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="style/global.css">
+	<script type="text/javascript" src="script/js/jq.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+	<script src="script/js/global.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="application">
+        <div id="viewport">
+        </div>
+        <div id="center_top">
+            <div id="center_top_wrapper">
+                <input type="text" class="search_input" id="search_input" name="search" placeholder="Search Card Name" />
+                <button name="search_button" class="search_button" id="search_button" onclick="SearchCards();"></button>
+                <div id="rarity">
+                    <div class="option"><input type="checkbox" class="mythic"><label class="rare">M</label></div>			
+                    <div class="option"><input type="checkbox" class="rare"><label class="rare">R</label></div>
+                    <div class="option"><input type="checkbox" class="uncommon"><label class="uncommon">U</label></div>
+                    <div class="option"><input type="checkbox" class="common"><label class="common">C</label></div>
+                </div>
+            </div>
+        </div>
+        <div id="right" style="position:absolute; z-index:3;"></div>
+    </div>
+</body>
+</html>
