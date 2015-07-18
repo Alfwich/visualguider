@@ -1,3 +1,5 @@
+# Quick script to format old card image names to the new format
+
 import os, sys
 
 def transformName(name):
@@ -5,7 +7,7 @@ def transformName(name):
 
 def main():
   for f in os.listdir("."):
-    if f[-3:] == "jpg":
+    if f[-3:] in "jpg":
       newName = transformName(f[:-3])
       os.system( "mv '%s' '%s'" % ( f, "%s.jpg" % newName ) )
 
