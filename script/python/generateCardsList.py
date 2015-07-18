@@ -4,9 +4,12 @@ def transformName(name):
   return "".join([ i for i in name.replace(u" ","-") if i.isalnum() or i == "-" ])
 
 def get(d,k):
-  if unicode(k) in d:
-    return unicode(d[unicode(k)]).replace( u"\"", u"'" )
-  return unicode("")
+  result = u""
+  
+  if k in d:
+    result = unicode(d[k]).replace( u"\"", u"'" )
+    
+  return result
 
 def checkImageExists(name):
   name = transformName( name )
@@ -45,7 +48,7 @@ def main():
         hasWritten = True
       else:
         f.write(u",")
-      entry = unicode( u" (\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\")\n").format(unicode(get(card,"name")), unicode("MTG"), get(card,"manaCost"), get(card,"set"), rarityMap[get(card,"rarity")], checkImageExists( get(card,"name") ) )
+      entry = unicode( u" (\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\")\n").format( get(card,"name"), u"MTG", get(card,"manaCost"), get(card,"set"), rarityMap[get(card,"rarity")], checkImageExists( get(card,"name") ) )
       f.write(entry.encode('utf8'))
     f.write( ";" )
 
