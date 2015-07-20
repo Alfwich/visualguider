@@ -113,6 +113,7 @@
 	width: 25px;
 	height: 25px;
 	margin-left:2px;
+  margin-top: 8px;
 	border-radius: 3px;
 	background-image: url( "../image/magnifyingglass.png" );
 	background-size: 100% 100%;	
@@ -168,7 +169,11 @@
 .option
 {
 	float:left;
-	margin-right: 10px;
+  position: relative;
+  top: 9px;
+  left: 11px;
+	margin-right: 5px;
+  margin-left: 5px;
 }
 
 .common

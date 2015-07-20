@@ -125,7 +125,7 @@ function AddCard( card, x, y )
 {
   if( card.img ) {
     // Temp testing variables
-    weight = 2 + Math.random();
+    weight = 2 + 5 * Math.random();
     x += ( Math.random() * 1000 ) - 500;
     y += ( Math.random() * 1000 ) - 500;
     
