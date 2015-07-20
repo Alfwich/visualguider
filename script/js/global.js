@@ -123,50 +123,52 @@ function RemoveCard( card )
 
 function AddCard( card, x, y )
 {
-	// Temp testing variables
-	weight = 2 + Math.random();
-	x += ( Math.random() * 1000 ) - 500;
-	y += ( Math.random() * 1000 ) - 500;
-	
-	// Create a new card object
-	var $div = $("<div>", 
-	{	
-		class: "card",
-		name: card.title,
-		left: x,
-		top: y,
-		weight: weight,
-		q:queries,
-	});
-	
-	if( weight > maxWeight )
-	{
-		maxWeight = weight;
-	}
-	
-	// Move the card to the correct spot to make it appear to 
-	// come out of nothing
-	$div.css("left", ( x*zoom )+( cardSize[0]*zoom)/2 );
-	$div.css("top", ( y*zoom )+(cardSize[1]*zoom)/2 );
+  if( card.img ) {
+    // Temp testing variables
+    weight = 2 + Math.random();
+    x += ( Math.random() * 1000 ) - 500;
+    y += ( Math.random() * 1000 ) - 500;
+    
+    // Create a new card object
+    var $div = $("<div>", 
+    {	
+      class: "card",
+      name: card.title,
+      left: x,
+      top: y,
+      weight: weight,
+      q:queries,
+    });
+    
+    if( weight > maxWeight )
+    {
+      maxWeight = weight;
+    }
+    
+    // Move the card to the correct spot to make it appear to 
+    // come out of nothing
+    $div.css("left", ( x*zoom )+( cardSize[0]*zoom)/2 );
+    $div.css("top", ( y*zoom )+(cardSize[1]*zoom)/2 );
 
-	// Set the background of the card
-	$div.css("background-image", "url('image/card/"+card.img+"')" );
-	
-	// When the card gets clicked focus on it
-	$div.click(function(e) {
-		
-		var card = e.target;
-		// Stop the current animation
-		$("#viewport").stop();
-						
-		SizeCards( card );
-		FocusViewport( card );
-		
-	});
-	
-	$("#viewport").append($div);
-	
-	SizeCards();
+    // Set the background of the card
+    $div.css("background-image", "url('image/card/"+card.img+"')" );
+    
+    // When the card gets clicked focus on it
+    $div.click(function(e) {
+      
+      var card = e.target;
+      // Stop the current animation
+      $("#viewport").stop();
+              
+      SizeCards( card );
+      FocusViewport( card );
+      
+    });
+    
+    $("#viewport").append($div);
+    
+    SizeCards();
+  }
 }
 
 // Will center the viewport at x, y
